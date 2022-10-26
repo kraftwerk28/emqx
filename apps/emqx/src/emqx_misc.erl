@@ -52,7 +52,8 @@
     explain_posix/1,
     pmap/2,
     pmap/3,
-    readable_error_msg/1
+    readable_error_msg/1,
+    pub_props_to_packet/1
 ]).
 
 -export([
@@ -546,3 +547,11 @@ ipv6_probe_test() ->
     end.
 
 -endif.
+
+pub_props_to_packet(Properties) ->
+    F = fun
+        ('User-Property', Val) -> {true, maps:to_list(Val)};
+        ('User-Property-Pairs', _) -> false;
+        (_, _) -> true
+    end,
+    maps:filtermap(F, Properties).
